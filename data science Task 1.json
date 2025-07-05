@@ -1,0 +1,52 @@
+1.import necessary libraries:
+import pandas as pd
+import numpy as np
+ from sklearn.pipeline import Pipeline
+ from sklearn.compose import columnTransformer
+ from sklearn.modelselection import train_test_split
+ from sklearn.processing import Standardscaler,OneHotencoder
+ from sklearn.impute import SimpleImputer
+ 
+ 2.Load 
+ Assuming have a dataset in a CSV file
+ df=pd.read_csv("scikit-learn")
+ x=df.drop('target_column', axis=1)
+ y=df['target_column']
+ x_train, x_test, y_train, y_test=train_test_split(x, y, test_size=0.4, random_state=45)
+
+ 3.Preprocessing for categorical features 
+ categorical_transformer=Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy ='most_frequent'))
+    ('encoder', OneHotEncoder(handle_unknown='ignore'))
+ ])
+
+4.Preprocessing for numerical features 
+numerical_transformer=Pipeline([
+    ('impute', SimpleImputer(strategy='mean')),
+    ('scaler', StandarScaler())
+])
+
+5.Combine with columnTransformer 
+from sk.learn.compose import xolumnTransformer
+preprocessor = ColumnTransformer(transformers=[
+    ('num, numerical_pipeline, num_cols'),
+    ('cat, categorical_pipeline, cat_cols')
+])
+
+6.Building full pipeline using model 
+from sklearn.pipeline import Pipeline
+from sklearn.lineqr_model import LogisticRegression
+clf=Pipeline([
+    ('preprocesor', preprocessor),
+    ('model', LogisticRegression())
+])
+Now:
+clf.fit(x_train, y_train) trains end to end
+clf.predict(x_test) applying the same transformation before predicting
+
+7.Supporting pandas 
+pipe=Pipeline([....]).set_output(transform='pandas')
+
+8.Example Usage 
+clf.fit(x_train, y_train)
+print("Test accuracy:", clf.score(x_test, y_test))
