@@ -1,0 +1,94 @@
+Customer Churn Prediction Web App
+
+• Predicting whether a customer is likely to churn, helping businesses retain valuable customers 
+
+1.Data Collection 
+   (i)  Source:telco customer churn dataset
+   (ii) Tools:requests,pandas
+
+   import pandas as pd
+   url="https://raw.githubusercontent.com/IBM/telco-customer-Churn-on-icp4d/master/data/Telco-Customer-Churn.csv"
+   df=pd.read_csv(url)
+
+   2.Preprocessing the Data
+   • Feature scaling
+   • Train-Test spilt
+   • Handling missed values
+   • Encoding categorical variables 
+
+   from sklearn.model_selection import train_test_split
+   from sklearn.preprocessing import LabelEncoder, StandardScaler
+   df.drop('customerID', axis=1, inplace=True)
+   df.replace("", pd.NA, inplace=True)
+   df.dropna(inplace=True)
+
+   le=LabelEncoder()
+   for column in df.select_dtypes('object').columns:
+      df[column]=le.fit_transform(df[column])
+   x=df.drop('Churn', axis=1)
+   y=['Churn']
+   scaler= StandardScaler()
+   x_scaled=scaler.fit_transform(x)
+   x_train, x_test, y_train, y_test=train_test_spilt(x_scaled,y, test_size=0.2, random_state=42)
+
+   3.Model Building 
+   from sklearn.ensemble import RandomForestClassifier
+   from sklearn.metrics import classification_report
+
+   model = RandomForestClassifier()
+   model.fit(x_train, y_train)
+   y.pred = model.predict(x_test)
+
+   print("classification_report(y_test, y_pred"))
+
+   4.Saving Model
+   import joblib
+   from flask import Flask, request, jsonify, render_template
+   import joblib
+   import numpy as np
+
+   app=Flask("Customer Churn Prediction Web App")
+
+   model = joblib.load('churn_model.pkl')
+   scaler = joblib.load('scaler.pkl')
+
+   def home():
+         return render_template('index.html')
+         ('/predict', methods=['POST'])
+   def predict():
+         data = [float(x) for x in request.form.values()]
+         final_input = scaler_transform([data])
+         prediction = model.predict(final_input)
+         return render_template('index.html', predictio_text=f'Customer Churn Presdiction:{"Yes if prediction[0] == 1 else "No"}')
+
+         if __name__ == '__main__':
+           app.run(debug=True)
+
+        templates/index.html
+        <html>
+        <head><title>Churn Predictor</title></head>
+        <body>
+              <h2>Customer Churn Predictor</h2>
+                  <form method="POST" action="/predict">
+                          <!-- Add inputs for each feature -->
+                                  <input type="text" name="MonthlyCharges" placeholder="Monthly Charges" required><br>
+                                          <!-- Add more input fields -->
+                                                  <input type="submit" value="Predict">
+                                                      </form>
+                                                          <h3>{{ prediction_text }}</h3>
+                                                          </body>
+                                                          </html>
+                
+6.Deployment
+
+Example usage
+1.Create requirements.txt and Procfile 
+2.Push code to GitHub 
+3.Link GitHub rebo to render and deploy 
+ 
+ Deliverables :
+ • A web app link (https://churn-predictor onrender.com)
+ 
+
+
+
