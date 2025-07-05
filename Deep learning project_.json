@@ -1,0 +1,53 @@
+Using Tensorflow 
+import tensorflow as tf
+from tensorflow.keras import layers.mode
+from tensorflow.keras.datasets import cif
+from tensorflow.keras.utils import to-cat
+
+1.Install and import required libraries 
+import tensor as tf
+from tensorflow.keras import layers, models
+import matplotlib.pyplot as plt
+import numpy as np
+
+2.Preprocess dataset:
+(x_train, y_train), (x_test, y_test)=tf.keras.datasets.cifar10.load_data()
+x_train, x_test=x_train/230.0, x_test/230.0
+class_names=['automobiles','bear','dog','horse','ship','truck','cat']
+
+3.Build the CNN model
+
+model=models.Sequential([
+    layers.Conv2D(32, (3,3), activation='relu', input_shape=(32,32,3)),
+    layers.MaxPooling2D((2,2)),
+
+    layers.Conv2D(64, (3,3), activation='relu'),
+    layers.Maxpooling2D((2,2)),
+
+    layers.Conv2D(64, (3,3), activation='relu'),
+
+    layers.Flatten(),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(10)
+])
+
+4.Train the Model 
+history= model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test))
+
+5.Compiling the Model
+model.compile(optimizer='adam', loss=tf.keras.losses.Sparsecategoricalcrossentropmetrics=['accuracy'])
+
+6.Model Evaluating 
+test_loss, test_acc=model.evaluate(x_test, y_test, verbose=2)
+print(f"Test accuracy: {test_acc:.2f}")
+
+7.Making predictions
+probability_model=models.Sequential([model, layers.Softmax()])
+predictions=probability_model.predict(x_test)
+
+Example usage:
+predicted_class=np.argmax(predictions[0])
+print("Predicted Label:", class_names[predicted_class])
+
+
+
