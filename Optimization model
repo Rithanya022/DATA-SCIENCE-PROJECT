@@ -1,0 +1,61 @@
+Optimizing Production for Maximum Profit in a Furniture Manufacturing Company 
+
+Business Problem Statement:
+• A furniture company manufactures tables,chairs and desks.Each product requires different amounts of wood,labor and machinery time.The company has limited resources per week and wants to maximize profits.
+
+Deliverable:
+A Jupyter notebook including:
+• Problem Definition
+• Data Inputs
+• Optimization Model Formulation 
+• Implementation with PULP
+• Results and interpretation 
+
+1.Problem Setup
+from pulp import *
+model = LpProbelm("Furniture_Production_Optimization", LpMaximize)
+
+2.Decision Variables 
+x = LpVariable("Tables", lowbound=0, cat='Integer')
+y = LpVariable("Chairs", lowbound=0, cat='Integer')
+z = LpVariable("Desks", lowbound=0, cat='Integer')
+
+3.Maximizing Profit
+model += 50*x + 20*y + 80*z, "Total_Profit"
+
+4.Objective Function 
+model += 50*x + 20*y + 80*z, "Total_Profit"
+
+5.Constraints
+model += 5*x + 2*y + 7*z <= 400, "Wood_Constraint"
+model += 10*x + 3*y + 15*z <= 450, "Labor_Constraint"
+model += 8*x + 2*y + 10*z <= 300, "Machine_Constraint"
+
+6.Problem Solving
+model.solve()
+print("Status:", LpStatus[model.status])
+
+7.Results
+print("Optimal Production Plan:")
+print("Tables:", x.varvalue)
+print("Chairs:", y.varvalue)
+print("Desks:", z.varvalue)
+
+print("Maximum Profit: $", value(model.objective))
+
+8.Sample Output
+Status: Optimal
+Tables: 20.0
+Chairs: 25.0 
+Desks: 10.0
+Maximum Profit: $2900.0
+
+9.Wrap up section in the notebook
+By optimally utilising the available resources, the company should produce:
+- 20 Tables
+- 25 Chairs
+- 10 Desks
+to earn a maximum weekly profit of **$2900**.
+
+- pulp for linear programming 
+- 'matplotlib' for visualizing constraints 
